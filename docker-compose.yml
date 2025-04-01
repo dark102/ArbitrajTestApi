@@ -1,0 +1,28 @@
+
+networks:
+  backend-network:
+    driver: bridge
+services:
+  arbitrajtestapi:
+    image: ${DOCKER_REGISTRY-}arbitrajtestapi
+    build:
+      context: .
+      dockerfile: ArbitrajTestApi/Dockerfile
+    networks:
+      - backend-network
+    depends_on:
+      - Pg.db
+    restart: unless-stopped
+  Pg.db:
+    image: postgres
+    networks:
+      backend-network:
+        aliases:
+          - Pg.db
+    environment:
+      - POSTGRES_USER=ArbitrajUser
+      - POSTGRES_PASSWORD=HKGUbkiwu13!
+      - POSTGRES_DB=ArbitrajDB
+    ports: 
+    - 5432:5432
+    restart: unless-stopped
