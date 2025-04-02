@@ -12,6 +12,11 @@ namespace ArbitrajTestApi.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql(@"DROP TABLE IF EXISTS logs;");
+            migrationBuilder.Sql(@"DROP TABLE IF EXISTS ArbitrageData;");
+            migrationBuilder.Sql(@"DROP TABLE IF EXISTS FuturesPrices;");
+            migrationBuilder.Sql(@"DROP TABLE IF EXISTS TrackedPairs;");
+
             migrationBuilder.CreateTable(
                 name: "ArbitrageData",
                 columns: table => new
@@ -53,14 +58,9 @@ namespace ArbitrajTestApi.Migrations
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     message = table.Column<string>(type: "text", nullable: false),
-                    messagetemplate = table.Column<string>(type: "text", nullable: false),
-                    message_template = table.Column<string>(type: "text", nullable: false),
-                    level = table.Column<string>(type: "varchar(10)", nullable: false),
+                    level = table.Column<string>(type: "text", nullable: false),
                     timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    exception = table.Column<string>(type: "text", nullable: false),
-                    properties = table.Column<string>(type: "text", nullable: false),
-                    logevent = table.Column<string>(type: "jsonb", nullable: false),
-                    log_event = table.Column<string>(type: "text", nullable: false)
+                    exception = table.Column<string>(type: "text", nullable: true),
                 },
                 constraints: table =>
                 {

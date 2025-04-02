@@ -12,6 +12,8 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Npgsql.EntityFrameworkCore.PostgreSQL;
+using Npgsql;
 
 namespace ArbitrajTestApi
 {
@@ -20,17 +22,18 @@ namespace ArbitrajTestApi
         public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
             // Настройка Entity Framework
             var migrationsAssembly = typeof(Program).GetTypeInfo().Assembly.GetName().Name;
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(migrationsAssembly));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
+                    b => b.MigrationsAssembly(migrationsAssembly));
             });
 
             // Настройка Hangfire
             builder.Services.AddHangfire(config =>
-                config.UsePostgreSqlStorage(options =>
-                    options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
+                config.UsePostgreSqlStorage(st => st.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
             builder.Services.AddHangfireServer();
 
             // Добавление сервисов
@@ -65,13 +68,15 @@ namespace ArbitrajTestApi
                     tableName: "Logs",
                     columnOptions: new Dictionary<string, ColumnWriterBase>
                     {
-                        { "Message", new RenderedMessageColumnWriter() },
-                        { "MessageTemplate", new MessageTemplateColumnWriter() },
-                        { "Level", new LevelColumnWriter(true) },
-                        { "Timestamp", new TimestampColumnWriter( NpgsqlTypes.NpgsqlDbType.Timestamp) },
-                        { "Exception", new ExceptionColumnWriter() },
-                        { "Properties", new PropertiesColumnWriter() }
-                    }));
+                        { "Message", new RenderedMessageColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) },
+                        { "Level", new LevelColumnWriter(true, NpgsqlTypes.NpgsqlDbType.Text) },
+                        { "Timestamp", new TimestampColumnWriter(NpgsqlTypes.NpgsqlDbType.Timestamp) },
+                        { "Exception", new ExceptionColumnWriter(NpgsqlTypes.NpgsqlDbType.Text) }
+                    },
+                    restrictedToMinimumLevel: LogEventLevel.Information,
+                    needAutoCreateTable: true,
+                    batchSizeLimit: 100,
+                    useCopy: false));
 
             var app = builder.Build();
 
@@ -101,7 +106,6 @@ namespace ArbitrajTestApi
                 options.RoutePrefix = string.Empty;
             });
             //}
-
             app.UseSerilogRequestLogging();
             app.UseHangfireDashboard();
             app.UseAuthorization();

@@ -98,34 +98,13 @@ namespace ArbitrajTestApi.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("id"));
 
                     b.Property<string>("exception")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("level")
                         .IsRequired()
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("log_event")
-                        .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<string>("logevent")
-                        .IsRequired()
-                        .HasColumnType("jsonb");
 
                     b.Property<string>("message")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("message_template")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("messagetemplate")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("properties")
                         .IsRequired()
                         .HasColumnType("text");
 

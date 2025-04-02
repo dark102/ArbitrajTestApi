@@ -51,11 +51,9 @@ namespace ArbitrajTestApi.Data
             {
                 entity.HasKey(e => e.id);
                 entity.Property(e => e.message).IsRequired().HasColumnType("text");
-                entity.Property(e => e.messagetemplate).IsRequired().HasColumnType("text");
-                entity.Property(e => e.level).IsRequired().HasColumnType("varchar(10)");
+                entity.Property(e => e.level).IsRequired().HasColumnType("text");
                 entity.Property(e => e.timestamp).IsRequired().HasColumnType("timestamp with time zone");
                 entity.Property(e => e.exception).HasColumnType("text");
-                entity.Property(e => e.logevent).HasColumnType("jsonb");
 
                 entity.HasIndex(e => e.timestamp)
                     .IsDescending()
