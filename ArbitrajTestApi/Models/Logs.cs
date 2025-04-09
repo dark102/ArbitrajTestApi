@@ -4,7 +4,6 @@ namespace ArbitrajTestApi.Models
 {
     public class Log
     {
-        [Key]
         public long id { get; set; }
 
         public string message { get; set; } = string.Empty;

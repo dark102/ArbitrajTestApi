@@ -68,10 +68,14 @@ namespace ArbitrajTestApi.Data
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.QuarterFutureSymbol).IsRequired();
                 entity.Property(e => e.BiQuarterFutureSymbol).IsRequired();
-                entity.Property(e => e.isNew).IsRequired();
+                entity.Property(e => e.EndDateOfTracking).IsRequired();
 
                 entity.HasIndex(t => new { t.QuarterFutureSymbol, t.BiQuarterFutureSymbol })
                     .IsUnique();
+                
+                entity.HasIndex(e => e.EndDateOfTracking)
+                    .IsDescending()
+                    .HasDatabaseName("IX_TrackedPairs_EndDateOfTracking");
             });
         }
     }

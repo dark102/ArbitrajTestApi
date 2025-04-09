@@ -24,7 +24,6 @@ namespace ArbitrajTestApi.Services
             _repository = repository;
             _logger = logger;
         }
-
         public async Task CalculateAndSaveHistoryArbitrageAsync(
             string quarterFutureSymbol,
             string biQuarterFutureSymbol,
@@ -42,11 +41,7 @@ namespace ArbitrajTestApi.Services
                     _logger.LogWarning("No data found for the specified time range");
                     return;
                 }
-                // ограничиваем перебор только последней свечой что бы небыло дублирования записей.
-                if (limit != 1500)
-                {
-                    quarterFuture = quarterFuture.Take(1).ToList();
-                }
+                
                 foreach (var quarterItem in quarterFuture)
                 {
                     var biquarterItem = biQuarterFuture.FirstOrDefault(x => x.Timestamp == quarterItem.Timestamp);
@@ -85,7 +80,11 @@ namespace ArbitrajTestApi.Services
         /// <param name="biQuarterSymbol"></param>
         /// <param name="biQuarterPrice"></param>
         /// <returns></returns>
-        private async Task<(decimal quarterPrice, decimal biQuarterPrice)> CheckPrice(string quarterSymbol, decimal? quarterPrice, string biQuarterSymbol, decimal? biQuarterPrice)
+        private async Task<(decimal quarterPrice, decimal biQuarterPrice)> CheckPrice(
+            string quarterSymbol, 
+            decimal? quarterPrice,
+            string biQuarterSymbol, 
+            decimal? biQuarterPrice)
         {
             if (quarterPrice == null || quarterPrice == 0 || biQuarterPrice == null || biQuarterPrice == 0)
             {

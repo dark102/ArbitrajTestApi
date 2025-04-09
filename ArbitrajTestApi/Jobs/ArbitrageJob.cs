@@ -42,7 +42,7 @@ namespace ArbitrajTestApi.Jobs
             {
                 _logger.LogInformation("Starting arbitrage calculation");
 
-                var trackedPairs = await _trackedPairsRepository.GetAllAsync();
+                var trackedPairs = (await _trackedPairsRepository.GetAllAsync()).Where(x=>x.EndDateOfTracking > DateTime.Now).ToList();
                 if (trackedPairs == null || !trackedPairs.Any())
                 {
                     _logger.LogInformation("No tracked pairs found in database");

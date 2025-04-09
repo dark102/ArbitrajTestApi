@@ -50,8 +50,8 @@ Body:
   "id": 0,
   "quarterFutureSymbol": "BTCUSDT_250627",
   "biQuarterFutureSymbol": "BTCUSDT_250926",
-  "isNew": true,
-  "lastDateOfEntry": "0001-01-01T00:00:00"
+  "lastDateOfEntry": "0001-01-01T00:00:00",
+  "EndDateOfTracking": "2025-06-27T00:00:00"
 }
 ```
 

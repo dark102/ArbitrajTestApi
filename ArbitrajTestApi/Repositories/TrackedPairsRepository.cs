@@ -29,17 +29,6 @@ namespace ArbitrajTestApi.Repositories
                 await _context.SaveChangesAsync();
             }
         }
-
-        public async Task UpdateIsNewAsync(int id, bool isNew)
-        {
-            var pair = await _context.TrackedPairs.FindAsync(id);
-            if (pair != null)
-            {
-                pair.isNew = isNew;
-                await _context.SaveChangesAsync();
-            }
-        }
-
         public async Task<List<TrackedPairs>> GetAllAsync()
         {
             return await _context.TrackedPairs.ToListAsync();
